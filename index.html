@@ -1,0 +1,2507 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明</title>
+<style>
+:root {
+  --fd-primary-fill-default: #1456f0;
+  --fd-primary-fill-hover: #336df4;
+  --fd-primary-fill-pressed: #0442d2;
+  --fd-primary-content-default: #1456f0;
+  --fd-primary-content-hover: #336df4;
+  --fd-primary-on-primary-fill: #ffffff;
+  --fd-function-success-content-default: #32a645;
+  --fd-function-warning-content-default: #ed6d0c;
+  --fd-function-danger-content-default: #f54a45;
+  --fd-text-title: #1f2329;
+  --fd-text-caption: #646a73;
+  --fd-text-placeholder: #8f959e;
+  --fd-text-disabled: #bbbfc4;
+  --fd-text-link-normal: #1456f0;
+  --fd-icon-n1: #2b2f36;
+  --fd-icon-n2: #646a73;
+  --fd-icon-n3: #8f959e;
+  --fd-icon-disabled: #bbbfc4;
+  --fd-ai-icon-gradient-start: #5083fb;
+  --fd-ai-icon-gradient-end: #1456f0;
+  --fd-ai-icon-gradient: linear-gradient(135deg, var(--fd-ai-icon-gradient-start) 0%, var(--fd-ai-icon-gradient-end) 100%);
+  --fd-motion-duration-fast: 200ms;
+  --fd-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --fd-header-height: 64px;
+  --fd-catalog-safe-left: 20px;
+  --fd-catalog-top-padding: 36px;
+  --fd-catalog-sticky-gap: 36px;
+  --fd-catalog-sticky-offset: calc(var(--fd-header-height) + var(--fd-catalog-sticky-gap));
+  --fd-line-border-card: #dee0e3;
+  --fd-line-border-component: #d0d3d6;
+  --fd-line-divider-default: rgba(31, 35, 41, 0.15);
+  --fd-bg-body: #ffffff;
+  --fd-bg-base: #f8f9fa;
+  --fd-bg-content-base: #f8f9fa;
+  --fd-bg-body-overlay: #f5f6f7;
+  --fd-bg-code: #f7f8fa;
+  --fd-code-token-keyword: var(--fd-primary-content-default);
+  --fd-code-token-type: var(--fd-primary-content-hover);
+  --fd-code-token-function: var(--fd-primary-content-default);
+  --fd-code-token-string: var(--fd-function-success-content-default);
+  --fd-code-token-number: var(--fd-function-warning-content-default);
+  --fd-code-token-comment: var(--fd-text-placeholder);
+  --fd-code-token-operator: var(--fd-text-caption);
+  --fd-code-token-danger: var(--fd-function-danger-content-default);
+  --fd-fill-hover: rgba(31, 35, 41, 0.08);
+  --fd-fill-pressed: rgba(31, 35, 41, 0.12);
+  --fd-fill-disabled: rgba(31, 35, 41, 0.06);
+  --fd-radius-m: 6px;
+  --fd-radius-l: 8px;
+  --fd-avatar-bg: #e8f0ff;
+  --fd-visitor-badge-orange: #f59e0b;
+  --fd-visitor-badge-green: #22c55e;
+  --fd-visitor-badge-blue: #3b82f6;
+  --fd-visitor-badge-purple: #8b5cf6;
+  --fd-cover-placeholder-bg: #eef3f7;
+  --fd-callout-info-bg: #f0f4ff;
+  --fd-callout-info-border: #c2d4ff;
+  --fd-callout-warning-bg: rgba(255, 129, 26, 0.1);
+  --fd-callout-warning-border: rgba(255, 129, 26, 0.35);
+  --fd-palette-blue-350: #7aa2ff;
+  --fd-font: "PingFang SC", "LarkCircular", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--fd-font);
+  color: var(--fd-text-title);
+  background: var(--fd-bg-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button {
+  font-family: inherit;
+}
+
+.fd-app-shell {
+  min-height: 100vh;
+  background: var(--fd-bg-body);
+}
+
+.fd-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 16px;
+  overflow: visible;
+  background: var(--fd-bg-body);
+  border-top: 0.5px solid var(--fd-line-border-card);
+  border-bottom: 0.5px solid var(--fd-line-border-card);
+}
+
+.fd-header__left,
+.fd-header__actions,
+.fd-header__nav-icons,
+.fd-breadcrumb-wiki-title,
+.fd-header__breadcrumb,
+.fd-header__meta,
+.fd-header__visitors {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.fd-header__left {
+  gap: 16px;
+  flex: 1 0 auto;
+  overflow: visible;
+}
+
+.fd-header__nav-icons {
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.fd-header__identity {
+  width: auto;
+  min-width: max-content;
+  padding: 11px 16px;
+  border-left: 0.5px solid var(--fd-line-divider-default);
+}
+
+.fd-breadcrumb-wiki-title,
+.fd-header__breadcrumb {
+  gap: 4px;
+  height: 22px;
+  color: var(--fd-text-caption);
+  font: 400 14px/22px var(--fd-font);
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.fd-breadcrumb-wiki-title__node {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.fd-breadcrumb-wiki-title__node--current {
+  color: var(--fd-text-title);
+  font-weight: 400;
+}
+
+.fd-breadcrumb-wiki-title__separator {
+  width: 12px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 12px;
+}
+
+.fd-header__breadcrumb strong {
+  color: var(--fd-text-title);
+  font-weight: 400;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.fd-header__star {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--fd-icon-n2);
+  background: transparent;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.fd-header__star:hover {
+  background: var(--fd-fill-hover);
+}
+
+.fd-header__star:focus-visible {
+  outline: 2px solid var(--fd-primary-fill-default);
+  outline-offset: 2px;
+}
+
+.fd-header__meta {
+  gap: 8px;
+  height: 20px;
+  color: var(--fd-text-caption);
+  font: 400 12px/20px var(--fd-font);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.fd-security {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fd-security__text {
+  display: inline-flex;
+  align-items: center;
+}
+
+.fd-header-divider,
+.fd-info-divider {
+  width: 1px;
+  height: 12px;
+  background: var(--fd-line-divider-default);
+  flex: 0 0 auto;
+}
+
+.fd-header-divider--tall {
+  height: 32px;
+  margin: 0 8px;
+}
+
+.fd-header__actions {
+  gap: 12px;
+  align-self: stretch;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.fd-header__visitors {
+  gap: 12px;
+}
+
+.fd-avatar-count {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fd-bg-body-overlay);
+  color: var(--fd-text-title);
+  font: 500 12px/1 var(--fd-font);
+  flex: 0 0 auto;
+}
+
+.fd-button {
+  height: 32px;
+  border: 0.5px solid var(--fd-line-border-component);
+  border-radius: var(--fd-radius-m);
+  background: var(--fd-bg-body);
+  color: var(--fd-text-title);
+  padding: 0 12px;
+  font: 400 14px/22px var(--fd-font);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fd-button--primary {
+  width: 80px;
+  border-color: var(--fd-primary-fill-default);
+  background: var(--fd-primary-fill-default);
+  color: var(--fd-primary-on-primary-fill);
+}
+
+.fd-share-button {
+  gap: 4px;
+}
+
+.fd-icon-button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fd-radius-m);
+  background: transparent;
+  color: var(--fd-icon-n2);
+  font: 400 15px/1 var(--fd-font);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fd-button:hover,
+.fd-icon-button:hover,
+.fd-doubao-button:hover {
+  background: var(--fd-fill-hover);
+}
+
+.fd-button--primary:hover {
+  background: var(--fd-primary-fill-hover);
+}
+
+.fd-button:active,
+.fd-icon-button:active,
+.fd-doubao-button:active {
+  background: var(--fd-fill-pressed);
+}
+
+.fd-button--primary:active {
+  background: var(--fd-primary-fill-pressed);
+}
+
+.fd-button:focus-visible,
+.fd-icon-button:focus-visible,
+.fd-doubao-button:focus-visible {
+  outline: 2px solid var(--fd-primary-fill-default);
+  outline-offset: 2px;
+}
+
+.fd-button--with-icon {
+  width: 88px;
+}
+
+.fd-mode-switch-button {
+  gap: 4px;
+}
+
+.fd-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  opacity: 0.78;
+  flex: 0 0 auto;
+}
+
+.fd-icon--collection {
+  width: 14px;
+  height: 14px;
+}
+
+.fd-icon--breadcrumb-separator {
+  width: 12px;
+  height: 12px;
+}
+
+.fd-icon--security {
+  width: 12px;
+  height: 12px;
+}
+
+.fd-icon--share,
+.fd-icon--mode-left,
+.fd-icon--mode-dropdown,
+.fd-icon--ask-doubao {
+  width: 14px;
+  height: 14px;
+}
+
+.fd-icon--n1 {
+  opacity: 0.92;
+}
+
+.fd-icon--n2 {
+  opacity: 0.78;
+}
+
+.fd-icon--n3 {
+  opacity: 0.56;
+}
+
+.fd-icon--share {
+  opacity: 1;
+  filter: brightness(0) invert(1);
+}
+
+.fd-doubao-button {
+  height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--fd-bg-body);
+  color: var(--fd-text-title);
+  padding: 0 8px;
+  font: 400 14px/22px var(--fd-font);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fd-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: block;
+  object-fit: cover;
+  background: var(--fd-avatar-bg);
+  border: 1px solid var(--fd-bg-body);
+  flex: 0 0 auto;
+}
+
+.fd-avatar-wrap {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.fd-visitor-badge {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  border: 2px solid var(--fd-bg-body);
+  border-radius: 999px;
+  box-sizing: content-box;
+  background: var(--fd-visitor-badge-green);
+}
+
+.fd-visitor-badge--orange {
+  background: var(--fd-visitor-badge-orange);
+}
+
+.fd-visitor-badge--green {
+  background: var(--fd-visitor-badge-green);
+}
+
+.fd-visitor-badge--blue {
+  background: var(--fd-visitor-badge-blue);
+}
+
+.fd-visitor-badge--purple {
+  background: var(--fd-visitor-badge-purple);
+}
+
+.fd-workspace {
+  min-height: 100vh;
+  padding-top: var(--fd-header-height);
+  background: var(--fd-bg-body);
+  overflow: visible;
+}
+
+.fd-app-shell--no-header .fd-workspace {
+  padding-top: 0;
+}
+
+.fd-cover {
+  width: 100%;
+  height: 268px;
+  background-color: var(--fd-cover-placeholder-bg);
+  background-size: cover;
+  background-position: center;
+}
+
+.fd-content-area {
+  width: 100%;
+  position: relative;
+  display: block;
+  margin-top: 20px;
+  min-height: 640px;
+}
+
+.fd-content-area--no-catalog,
+.fd-content-area[data-catalog="hidden"] {
+  min-height: 640px;
+}
+
+.fd-catalog {
+  position: absolute;
+  top: 0;
+  left: var(--fd-catalog-safe-left);
+  width: 260px;
+  color: var(--fd-text-caption);
+  z-index: 9;
+  transition:
+    width var(--fd-motion-duration-fast) var(--fd-motion-ease-standard),
+    opacity var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+  will-change: width;
+}
+
+.fd-catalog.fd-catalog--stuck {
+  position: fixed;
+  top: var(--fd-catalog-sticky-offset);
+  left: var(--fd-catalog-safe-left);
+}
+
+.fd-catalog__top {
+  height: var(--fd-catalog-top-padding);
+}
+
+.fd-catalog__collapse {
+  position: relative;
+  width: 24px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fd-icon-n2);
+  font: 400 18px/1 var(--fd-font);
+  cursor: pointer;
+  transition: background-color var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+}
+
+.fd-catalog__collapse:hover {
+  background: var(--fd-fill-hover);
+}
+
+.fd-catalog__collapse:focus-visible {
+  outline: 2px solid var(--fd-primary-fill-default);
+  outline-offset: 2px;
+}
+
+.fd-icon--catalog {
+  position: absolute;
+  inset: 10px 4px;
+  width: 16px;
+  height: 16px;
+  transition:
+    opacity var(--fd-motion-duration-fast) var(--fd-motion-ease-standard),
+    transform var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+}
+
+.fd-catalog__items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 0;
+  max-height: calc(100vh - var(--fd-catalog-sticky-offset) - var(--fd-catalog-top-padding) - 24px);
+  opacity: 1;
+  transform: translateX(0);
+  overflow: hidden;
+  transition:
+    opacity var(--fd-motion-duration-fast) var(--fd-motion-ease-standard),
+    transform var(--fd-motion-duration-fast) var(--fd-motion-ease-standard),
+    max-height var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+}
+
+.fd-catalog__icon-collapsed {
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.fd-content-area--catalog-collapsed .fd-catalog {
+  width: 24px;
+}
+
+.fd-content-area--catalog-collapsed .fd-catalog__icon-expanded {
+  opacity: 0;
+  transform: translateX(4px);
+}
+
+.fd-content-area--catalog-collapsed .fd-catalog__items {
+  max-height: 0;
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+}
+
+.fd-content-area--catalog-collapsed .fd-catalog__icon-collapsed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fd-catalog__item {
+  width: 240px;
+  height: 22px;
+  color: var(--fd-text-caption);
+  text-decoration: none;
+  font: 400 14px/22px var(--fd-font);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-catalog__item--l0,
+.fd-catalog__item--l1 {
+  font-weight: 500;
+}
+
+.fd-catalog__item--l2 {
+  padding-left: 12px;
+}
+
+.fd-catalog__item--l3 {
+  padding-left: 24px;
+}
+
+.fd-doc-canvas {
+  width: 800px;
+  min-height: 640px;
+  background: var(--fd-bg-body);
+  padding: 0;
+  margin: 0 auto;
+}
+
+.doc-body {
+  width: 800px;
+  max-width: 100%;
+  margin: 0;
+}
+
+.doc-heading-block,
+.doc-text-block,
+.doc-list-block,
+.doc-link-block,
+.doc-image-block,
+.doc-columns-block,
+.doc-quote-block,
+.doc-table-block,
+.doc-code-block,
+.doc-callout-block,
+.doc-divider-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+[data-editable="true"] {
+  caret-color: var(--fd-text-title);
+  outline: none;
+  box-shadow: none;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+[data-editable="true"]:focus,
+[data-editable="true"]:focus-visible,
+[contenteditable="true"]:focus,
+[contenteditable="true"]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+[data-editable="true"]::selection {
+  background: rgba(20, 86, 240, 0.16);
+}
+
+.doc-heading-block[data-commented="true"]::after,
+.doc-text-block[data-commented="true"]::after,
+.doc-list-block[data-commented="true"]::after,
+.doc-link-block[data-commented="true"]::after,
+.doc-image-block[data-commented="true"]::after,
+.doc-columns-block[data-commented="true"]::after,
+.doc-quote-block[data-commented="true"]::after,
+.doc-table-block[data-commented="true"]::after,
+.doc-code-block[data-commented="true"]::after,
+.doc-callout-block[data-commented="true"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -18px;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 999px;
+  background: var(--fd-primary-fill-default);
+}
+
+.doc-heading-block__top-spacer,
+.doc-heading-block__bottom-spacer,
+.doc-text-block__top-spacer,
+.doc-text-block__bottom-spacer,
+.doc-list-block__top-spacer,
+.doc-list-block__bottom-spacer,
+.doc-link-block__top-spacer,
+.doc-link-block__bottom-spacer,
+.doc-image-block__top-spacer,
+.doc-image-block__bottom-spacer,
+.doc-columns-block__top-spacer,
+.doc-columns-block__bottom-spacer,
+.doc-quote-block__top-spacer,
+.doc-quote-block__bottom-spacer,
+.doc-table-block__top-spacer,
+.doc-table-block__bottom-spacer,
+.doc-code-block__top-spacer,
+.doc-code-block__bottom-spacer,
+.doc-callout-block__top-spacer,
+.doc-callout-block__bottom-spacer,
+.doc-divider-block__top-spacer,
+.doc-divider-block__bottom-spacer {
+  flex: 0 0 auto;
+}
+
+.is-collapsed {
+  display: none !important;
+}
+
+.doc-heading-block__text-wrap,
+.doc-text-block__text-wrap {
+  width: 100%;
+}
+
+.doc-heading-block__text,
+.doc-text-block__text {
+  margin: 0;
+  width: 100%;
+  color: var(--fd-text-title);
+  font-family: var(--fd-font);
+  text-align: left;
+  --doc-mention-font: inherit;
+  --doc-mention-avatar-size: 20px;
+  --doc-mention-name-padding-right: 8px;
+}
+
+.doc-text-block__text {
+  font: 400 16px/26px var(--fd-font);
+  --doc-mention-font: 400 16px/26px var(--fd-font);
+  --doc-mention-avatar-size: 20px;
+  --doc-mention-name-padding-right: 8px;
+}
+
+.doc-heading-block[data-variant="top-title"] .doc-heading-block__text {
+  font: 500 34px/48px var(--fd-font);
+  --doc-mention-font: 500 34px/48px var(--fd-font);
+  --doc-mention-avatar-size: 28px;
+  --doc-mention-name-padding-right: 12px;
+}
+
+.doc-heading-block[data-variant="h1"] .doc-heading-block__text {
+  font: 500 26px/37px var(--fd-font);
+  --doc-mention-font: 500 26px/37px var(--fd-font);
+  --doc-mention-avatar-size: 28px;
+  --doc-mention-name-padding-right: 12px;
+}
+
+.doc-heading-block[data-variant="h2"] .doc-heading-block__text {
+  font: 500 22px/30px var(--fd-font);
+  --doc-mention-font: 500 22px/30px var(--fd-font);
+  --doc-mention-avatar-size: 24px;
+  --doc-mention-name-padding-right: 10px;
+}
+
+.doc-heading-block[data-variant="h3"] .doc-heading-block__text {
+  font: 500 20px/28px var(--fd-font);
+  --doc-mention-font: 500 20px/28px var(--fd-font);
+  --doc-mention-avatar-size: 22px;
+  --doc-mention-name-padding-right: 10px;
+}
+
+.doc-heading-block[data-variant="h4"] .doc-heading-block__text {
+  font: 500 18px/25px var(--fd-font);
+  --doc-mention-font: 500 18px/25px var(--fd-font);
+  --doc-mention-avatar-size: 20px;
+  --doc-mention-name-padding-right: 8px;
+}
+
+.doc-heading-block[data-variant="h5-h9"] .doc-heading-block__text {
+  font: 500 16px/22px var(--fd-font);
+  --doc-mention-font: 500 16px/22px var(--fd-font);
+  --doc-mention-avatar-size: 20px;
+  --doc-mention-name-padding-right: 8px;
+}
+
+.doc-inline-text {
+  white-space: pre-wrap;
+}
+
+.doc-mention {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  margin: 0 1px;
+  padding: 1px var(--doc-mention-name-padding-right) 1px 1px;
+  gap: 4px;
+  border-radius: 100px;
+  font: var(--doc-mention-font);
+  line-height: var(--doc-mention-avatar-size);
+  height: calc(var(--doc-mention-avatar-size) + 2px);
+  vertical-align: text-bottom;
+  white-space: nowrap;
+}
+
+.doc-mention--self {
+  background: var(--fd-primary-fill-default);
+  color: var(--fd-bg-body);
+}
+
+.doc-mention--other {
+  background: var(--fd-fill-hover);
+  color: var(--fd-text-caption);
+}
+
+.doc-mention__avatar {
+  width: var(--doc-mention-avatar-size);
+  height: var(--doc-mention-avatar-size);
+  flex: 0 0 var(--doc-mention-avatar-size);
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.doc-mention__name {
+  display: inline-block;
+  color: inherit;
+  font: inherit;
+  line-height: var(--doc-mention-avatar-size);
+}
+
+.doc-link-block__anchor {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  color: var(--fd-text-link-normal);
+  text-decoration: none;
+}
+
+.doc-link-block__title,
+.doc-link-block__text {
+  margin: 0;
+  max-width: 100%;
+  color: var(--fd-text-link-normal);
+  font: 400 16px/26px var(--fd-font);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.doc-link-block__anchor:hover .doc-link-block__title,
+.doc-link-block__anchor:hover .doc-link-block__text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.doc-image-block__figure {
+  width: 100%;
+  margin: 0;
+}
+
+.doc-image-block__frame {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--fd-radius-m);
+  background: var(--fd-bg-body);
+}
+
+.doc-image-block__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doc-image-block__frame--placeholder {
+  border: 1px dashed var(--fd-line-border-card);
+  background: var(--fd-bg-body-overlay);
+}
+
+.doc-image-block__placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fd-text-placeholder);
+  font: 400 14px/22px var(--fd-font);
+}
+
+.doc-image-block__caption {
+  margin: 6px 0 0;
+  color: var(--fd-text-caption);
+  font: 400 14px/22px var(--fd-font);
+  text-align: center;
+}
+
+.doc-columns-block__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--doc-columns-count), minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  align-items: start;
+}
+
+.doc-columns-block__column {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: var(--fd-bg-body);
+  transition: background-color var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+}
+
+.doc-columns-block:hover .doc-columns-block__column,
+.doc-columns-block__column:hover {
+  background: var(--fd-fill-hover);
+}
+
+.doc-columns-block__placeholder {
+  width: 100%;
+  min-height: 28px;
+  padding: 4px;
+  border: 1px dashed var(--fd-line-divider-default);
+  border-radius: 4px;
+  background: var(--fd-bg-content-base);
+  color: var(--fd-text-placeholder);
+  font: 400 12px/20px var(--fd-font);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .doc-columns-block__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fd-doc-info {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  color: var(--fd-text-caption);
+  font: 400 14px/22px var(--fd-font);
+}
+
+.fd-doc-info__left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.fd-doc-info__ai,
+.fd-info-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.fd-doc-info__ai {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--fd-text-caption);
+  font: 400 14px/22px var(--fd-font);
+}
+
+.fd-icon--doc-info {
+  width: 14px;
+  height: 14px;
+}
+
+.fd-icon--ai-gradient {
+  opacity: 1;
+  background: var(--fd-ai-icon-gradient);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.fd-owner-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  color: var(--fd-text-title);
+}
+
+.fd-owner-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: block;
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: var(--fd-avatar-bg);
+}
+
+.doc-list-block__list {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--fd-text-title);
+  font: 400 16px/26px var(--fd-font);
+}
+
+.doc-list-block__item {
+  min-height: 26px;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: start;
+  color: var(--fd-text-title);
+  font: 400 16px/26px var(--fd-font);
+}
+
+.doc-list-block__item[data-level="2"] {
+  padding-left: 24px;
+}
+
+.doc-list-block__item[data-level="3"] {
+  padding-left: 48px;
+}
+
+.doc-list-block__marker {
+  width: 16px;
+  height: 26px;
+  color: var(--fd-primary-fill-default);
+  flex: 0 0 auto;
+}
+
+.doc-list-block__marker--ordered {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  font: 400 16px/26px "Helvetica Neue", Arial, sans-serif;
+  white-space: nowrap;
+}
+
+.doc-list-block__marker--bullet {
+  position: relative;
+  display: block;
+}
+
+.doc-list-block__marker--bullet::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fd-primary-fill-default);
+}
+
+.doc-list-block__item[data-level="2"] .doc-list-block__marker--bullet::before {
+  background: transparent;
+  border: 1px solid var(--fd-primary-fill-default);
+}
+
+.doc-list-block__item[data-level="3"] .doc-list-block__marker--bullet::before {
+  left: 5.5px;
+  top: 10.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 0;
+  background: var(--fd-primary-fill-default);
+  border: 0;
+}
+
+.doc-list-block__text {
+  min-width: 0;
+  color: var(--fd-text-title);
+}
+
+.doc-todo-list-block__list {
+  width: 100%;
+}
+
+.doc-todo-list-block__item {
+  grid-template-columns: 16px minmax(0, 1fr);
+}
+
+.doc-todo-list-block__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 5px;
+  padding: 0;
+  border: 1px solid var(--fd-text-title);
+  border-radius: 4px;
+  background: var(--fd-bg-body);
+  flex: 0 0 auto;
+  color: var(--fd-palette-blue-350);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.doc-todo-list-block__item.is-checked .doc-todo-list-block__checkbox {
+  border-color: var(--fd-text-caption);
+}
+
+.doc-todo-list-block__checkbox:focus-visible {
+  outline: 2px solid var(--fd-primary-fill-default);
+  outline-offset: 2px;
+}
+
+.doc-todo-list-block__check-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  opacity: 0;
+  background: var(--fd-palette-blue-350);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 16px 16px;
+  mask-size: 16px 16px;
+}
+
+.doc-todo-list-block__item.is-checked .doc-todo-list-block__check-icon {
+  opacity: 1;
+}
+
+.doc-todo-list-block__item.is-checked .doc-todo-list-block__text {
+  color: var(--fd-text-placeholder);
+  text-decoration: line-through;
+  text-decoration-color: var(--fd-text-placeholder);
+  text-decoration-thickness: 1px;
+}
+
+.doc-quote-block__content {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--fd-line-border-component);
+  color: var(--fd-text-caption);
+  font: 400 16px/26px var(--fd-font);
+}
+
+.doc-table-block__scroll {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--fd-line-border-card);
+  background: var(--fd-bg-body);
+}
+
+.doc-table-block__table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--fd-text-title);
+  font: 400 14px/20px var(--fd-font);
+}
+
+.doc-table-block__th,
+.doc-table-block__td {
+  min-width: 120px;
+  padding: 8px;
+  border-right: 1px solid var(--fd-line-divider-default);
+  border-bottom: 1px solid var(--fd-line-divider-default);
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc-table-block__th:last-child,
+.doc-table-block__td:last-child {
+  border-right: 0;
+}
+
+.doc-table-block__tr:last-child .doc-table-block__td {
+  border-bottom: 0;
+}
+
+.doc-table-block__th {
+  background: var(--fd-bg-body-overlay);
+  color: var(--fd-text-caption);
+  font-weight: 500;
+}
+
+.doc-code-block__frame {
+  border: 1px solid var(--fd-line-border-card);
+  border-radius: var(--fd-radius-l);
+  background: var(--fd-bg-body-overlay);
+  overflow: hidden;
+}
+
+.doc-code-block__title {
+  padding: 10px 24px 8px;
+  color: var(--fd-text-placeholder);
+  font: 400 14px/22px var(--fd-font);
+}
+
+.doc-code-block__body {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+.doc-code-block__line-numbers {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 16px;
+  list-style: none;
+  color: var(--fd-text-placeholder);
+  font: 400 14px/22px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  text-align: right;
+  user-select: none;
+}
+
+.doc-code-block__line-number {
+  min-width: 17px;
+  height: 22px;
+}
+
+.doc-code-block__pre {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  color: var(--fd-text-title);
+  font: 400 14px/22px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.doc-code-block__code {
+  display: block;
+  min-width: max-content;
+  font: inherit;
+}
+
+.doc-code-block__code-line {
+  display: block;
+  min-height: 22px;
+  white-space: pre;
+}
+
+.doc-code-block__right-gutter {
+  flex: 0 0 16px;
+  align-self: stretch;
+}
+
+.doc-code-token--keyword {
+  color: var(--fd-code-token-keyword);
+}
+
+.doc-code-token--type {
+  color: var(--fd-code-token-type);
+}
+
+.doc-code-token--function {
+  color: var(--fd-code-token-function);
+}
+
+.doc-code-token--string {
+  color: var(--fd-code-token-string);
+}
+
+.doc-code-token--number {
+  color: var(--fd-code-token-number);
+}
+
+.doc-code-token--comment {
+  color: var(--fd-code-token-comment);
+}
+
+.doc-code-token--operator {
+  color: var(--fd-code-token-operator);
+}
+
+.doc-code-token--danger {
+  color: var(--fd-code-token-danger);
+}
+
+.doc-callout-block__content {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  border: 1px solid var(--fd-callout-info-border);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--fd-text-title);
+  background: var(--fd-callout-info-bg);
+  font: 400 16px/26px var(--fd-font);
+}
+
+.doc-callout-block__emoji {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  font: 400 20px/24px var(--fd-font);
+}
+
+.doc-callout-block__main {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doc-callout-block__title {
+  font: 500 16px/22px var(--fd-font);
+}
+
+.doc-callout-block__body {
+  font: 400 16px/26px var(--fd-font);
+}
+
+.doc-callout-block__body--solo {
+  min-height: 26px;
+}
+
+.doc-callout-block[data-tone="neutral"] .doc-callout-block__content {
+  background: var(--fd-bg-body-overlay);
+  border-color: var(--fd-line-border-card);
+}
+
+.doc-callout-block[data-tone="warning"] .doc-callout-block__content {
+  background: var(--fd-callout-warning-bg);
+  border-color: var(--fd-callout-warning-border);
+}
+
+.doc-divider-block__line {
+  height: 1px;
+  background: var(--fd-line-divider-default);
+}
+
+.fd-comment-panel {
+  position: absolute;
+  top: 0;
+  left: calc(50% + 460px);
+  width: 320px;
+  padding: 36px 16px 0 0;
+  color: var(--fd-text-caption);
+  font: 400 14px/22px var(--fd-font);
+}
+
+.fd-comment-panel__title {
+  margin: 0 0 12px;
+  color: var(--fd-text-title);
+  font: 500 14px/22px var(--fd-font);
+}
+
+.fd-comment-card {
+  border: 1px solid var(--fd-line-border-card);
+  border-radius: var(--fd-radius-l);
+  padding: 12px;
+  background: var(--fd-bg-body);
+}
+
+.fd-comment-card + .fd-comment-card {
+  margin-top: 12px;
+}
+
+.fd-comment-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--fd-text-caption);
+  font: 400 12px/20px var(--fd-font);
+}
+
+.fd-comment-card__author {
+  color: var(--fd-text-title);
+  font-weight: 500;
+}
+
+.fd-comment-card__body {
+  margin: 8px 0;
+  color: var(--fd-text-title);
+  font: 400 14px/22px var(--fd-font);
+}
+
+.fd-comment-card__anchor {
+  color: var(--fd-text-placeholder);
+  font: 400 12px/20px var(--fd-font);
+}
+
+@media (max-width: 1100px) {
+  .fd-content-area {
+    min-height: 640px;
+  }
+
+  .fd-catalog {
+    display: none;
+  }
+
+  .fd-comment-panel {
+    display: none;
+  }
+
+  .fd-doc-canvas {
+    width: min(800px, calc(100vw - 40px));
+    margin: 0 auto;
+  }
+
+  .doc-body {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-catalog,
+  .fd-catalog__collapse,
+  .fd-icon--catalog,
+  .fd-catalog__items {
+    transition: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .fd-header__identity {
+    width: min(52vw, 384px);
+  }
+
+  .fd-header__visitors,
+  .fd-doubao-button,
+  .fd-header-divider--tall {
+    display: none;
+  }
+
+  .fd-cover {
+    height: 180px;
+  }
+
+  .fd-content-area {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .fd-header__meta,
+  .fd-button:not(.fd-button--primary) {
+    display: none;
+  }
+}
+
+
+
+/* Static prototype interaction layer */
+.fd-reading-progress {
+  position: fixed;
+  top: var(--fd-header-height);
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9;
+  background: transparent;
+  pointer-events: none;
+}
+
+.fd-reading-progress__bar {
+  width: 0;
+  height: 100%;
+  background: var(--fd-primary-fill-default);
+  transition: width var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+}
+
+.fd-floating-layer {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--fd-line-border-card);
+  border-radius: var(--fd-radius-l);
+  background: var(--fd-bg-body);
+  box-shadow: none;
+}
+
+.fd-floating-layer__button {
+  appearance: none;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--fd-line-border-component);
+  border-radius: var(--fd-radius-m);
+  background: var(--fd-bg-body);
+  color: var(--fd-text-title);
+  font: 400 13px/20px var(--fd-font);
+  cursor: pointer;
+}
+
+.fd-floating-layer__button:hover {
+  background: var(--fd-fill-hover);
+}
+
+.fd-floating-layer__button:focus-visible {
+  outline: 2px solid var(--fd-primary-fill-default);
+  outline-offset: 2px;
+}
+
+.fd-floating-layer__button[data-active="true"] {
+  border-color: var(--fd-primary-fill-default);
+  color: var(--fd-primary-content-default);
+}
+
+.fd-prototype-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 74px;
+  z-index: 10;
+  max-width: 300px;
+  padding: 10px 12px;
+  border: 1px solid var(--fd-line-border-card);
+  border-radius: var(--fd-radius-m);
+  background: var(--fd-bg-body);
+  color: var(--fd-text-title);
+  font: 400 14px/22px var(--fd-font);
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition:
+    opacity var(--fd-motion-duration-fast) var(--fd-motion-ease-standard),
+    transform var(--fd-motion-duration-fast) var(--fd-motion-ease-standard);
+}
+
+.fd-prototype-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fd-doc-search-hit {
+  background: var(--fd-fill-hover);
+  border-radius: var(--fd-radius-m);
+}
+
+.fd-app-shell[data-surface-mode="reading"] [data-editable="true"] {
+  cursor: default;
+}
+
+.fd-app-shell[data-surface-mode="reading"] .fd-floating-layer__button[data-proto-action="toggle-mode"] {
+  border-color: var(--fd-primary-fill-default);
+  color: var(--fd-primary-content-default);
+}
+
+@media (max-width: 960px) {
+  .fd-floating-layer {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .fd-prototype-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 76px;
+    max-width: none;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="fd-app-shell" data-surface-mode="editing">
+<header class="fd-header">
+  <div class="fd-header__left">
+    <div class="fd-header__nav-icons" aria-hidden="true">
+      <button class="fd-icon-button" type="button"><img class="fd-icon" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_side-fold_outlined.d5d4ac41.svg" aria-hidden="true"></button>
+      <button class="fd-icon-button" type="button"><img class="fd-icon" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_home_outlined.c354739d.svg" aria-hidden="true"></button>
+    </div>
+    <div class="fd-header__identity">
+      <div class="fd-breadcrumb-wiki-title"><span class="fd-breadcrumb-wiki-title__node">TRAE Work</span><span class="fd-breadcrumb-wiki-title__separator" aria-hidden="true"><img class="fd-icon fd-icon--breadcrumb-separator fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_right-bold_outlined.da8f603c.svg" aria-hidden="true"></span><span class="fd-breadcrumb-wiki-title__node">技能库</span><span class="fd-breadcrumb-wiki-title__separator" aria-hidden="true"><img class="fd-icon fd-icon--breadcrumb-separator fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_right-bold_outlined.da8f603c.svg" aria-hidden="true"></span><span class="fd-breadcrumb-wiki-title__node">文档原型</span><span class="fd-breadcrumb-wiki-title__separator" aria-hidden="true"><img class="fd-icon fd-icon--breadcrumb-separator fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_right-bold_outlined.da8f603c.svg" aria-hidden="true"></span><strong class="fd-breadcrumb-wiki-title__node fd-breadcrumb-wiki-title__node--current">lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明</strong><button class="fd-header__star" type="button" aria-label="收藏文档"><img class="fd-icon fd-icon--collection fd-icon--n2" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_collection_outlined.fd9dd20f.svg" aria-hidden="true"></button></div>
+      <div class="fd-header__meta">
+        <span class="fd-security"><img class="fd-icon fd-icon--security fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_safe_filled.2520401c.svg" aria-hidden="true"><span class="fd-security__text">L2-内部</span></span>
+        <span class="fd-header-divider" aria-hidden="true"></span>
+        <span>最近修改：2026-07-07 16:40</span>
+      </div>
+    </div>
+  </div>
+  <div class="fd-header__actions" aria-label="Document actions">
+    <div class="fd-header__visitors"><span class="fd-avatar-wrap fd-avatar-wrap--collaborator"><img class="fd-avatar" src="assets/avatars/avatar-chen.png" alt="陈晨"><span class="fd-visitor-badge fd-visitor-badge--green" aria-hidden="true"></span></span><span class="fd-avatar-wrap fd-avatar-wrap--collaborator"><img class="fd-avatar" src="assets/avatars/avatar-zhang.png" alt="张敏"><span class="fd-visitor-badge fd-visitor-badge--blue" aria-hidden="true"></span></span><span class="fd-avatar-wrap fd-avatar-wrap--collaborator"><img class="fd-avatar" src="assets/avatars/avatar-lin.png" alt="林一"><span class="fd-visitor-badge fd-visitor-badge--orange" aria-hidden="true"></span></span><span class="fd-avatar-count">+6</span></div>
+    <button class="fd-button fd-button--primary fd-share-button" type="button"><img class="fd-icon fd-icon--share" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_group_outlined.f823ac70.svg" aria-hidden="true"><span class="fd-button__label">分享</span></button>
+    <button class="fd-button fd-button--with-icon fd-mode-switch-button" type="button"><img class="fd-icon fd-icon--mode-left fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_edit_outlined.8fe9b3cf.svg" aria-hidden="true"><span class="fd-button__label">编辑</span><img class="fd-icon fd-icon--mode-dropdown fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_down_outlined.8d68f3dd.svg" aria-hidden="true"></button>
+    <button class="fd-icon-button" type="button" aria-label="通知"><img class="fd-icon fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_bell_outlined.02ae06c9.svg" aria-hidden="true"></button>
+    <button class="fd-icon-button" type="button" aria-label="更多"><img class="fd-icon fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_more_outlined.d16271c7.svg" aria-hidden="true"></button>
+    <span class="fd-header-divider fd-header-divider--tall" aria-hidden="true"></span>
+    <button class="fd-icon-button" type="button" aria-label="搜索"><img class="fd-icon fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_search_outlined.eac3ce55.svg" aria-hidden="true"></button>
+    <button class="fd-icon-button" type="button" aria-label="添加"><img class="fd-icon fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_add_outlined.c0ef061e.svg" aria-hidden="true"></button>
+    <span class="fd-header-divider fd-header-divider--tall" aria-hidden="true"></span>
+    <button class="fd-doubao-button" type="button"><img class="fd-icon fd-icon--ask-doubao fd-icon--n1" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_ask-doubao_outlined.6d539078.svg" aria-hidden="true"><span class="fd-doubao-button__label">问问豆包</span></button>
+    <img class="fd-avatar fd-current-user-avatar" src="assets/avatars/avatar-user.png" alt="本人头像">
+  </div>
+</header>
+<main class="fd-workspace">
+<section class="fd-cover" style="background-image:url(assets/images/doc-cover.png)" aria-label="文档封面"></section>
+<section class="fd-content-area" data-catalog="visible">
+<nav class="fd-catalog" aria-label="文档目录">
+<div class="fd-catalog__top"></div>
+<button class="fd-catalog__collapse" type="button" aria-label="收起目录" aria-expanded="true" data-catalog-toggle><img class="fd-icon fd-icon--catalog fd-icon--n2 fd-catalog__icon-expanded" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_up-left_outlined.5856981b.svg" aria-hidden="true"><img class="fd-icon fd-icon--catalog fd-icon--n2 fd-catalog__icon-collapsed" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_slide_outlined.3ead7704.svg" aria-hidden="true"></button>
+<div class="fd-catalog__items">
+<a class="fd-catalog__item fd-catalog__item--l0" href="#title">lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明</a>
+<a class="fd-catalog__item fd-catalog__item--l1" href="#b-what">这个 Skill 能做什么</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-scenarios">适用场景</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-workflow">推荐工作流</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-blocks">支持的文档区块</a>
+<a class="fd-catalog__item fd-catalog__item--l1" href="#b-install">安装教程</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-install-package">方式一：准备本地 Skill 包</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-install-market">方式二：在插件市场上传</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-install-check">安装后确认</a>
+<a class="fd-catalog__item fd-catalog__item--l1" href="#b-interactions">这个页面里的基础交互</a>
+<a class="fd-catalog__item fd-catalog__item--l2" href="#b-contract">本页页面契约摘要</a>
+<a class="fd-catalog__item fd-catalog__item--l1" href="#b-check">给同事使用前的检查</a>
+</div>
+</nav>
+<article class="fd-doc-canvas">
+<div class="doc-body">
+<div class="doc-heading-block" data-variant="top-title" id="title" data-block-id="title" data-block-type="topTitle">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:36px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明</div>
+</div>
+<div class="doc-heading-block__bottom-spacer" aria-hidden="true" style="height:22px"></div>
+</div>
+<div class="fd-doc-info">
+  <div class="fd-doc-info__left">
+    <span class="fd-owner-tag"><img class="fd-owner-avatar" src="assets/avatars/avatar-owner.png" alt="郭寒"><span>郭寒</span></span>
+    <span class="fd-info-divider" aria-hidden="true"></span>
+    <span>今天 16:40 更新</span>
+    <span class="fd-info-divider" aria-hidden="true"></span>
+    <span>由 TRAE 创建</span>
+    <span class="fd-info-stat"><img class="fd-icon fd-icon--doc-info fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_group_outlined.f823ac70.svg" aria-hidden="true"><span>28</span></span>
+    <span class="fd-info-stat"><img class="fd-icon fd-icon--doc-info fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_visible_outlined.d8dd61df.svg" aria-hidden="true"><span>126</span></span>
+    <span class="fd-info-stat"><img class="fd-icon fd-icon--doc-info fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_thumbsup_outlined.fd59f54a.svg" aria-hidden="true"><span>9</span></span>
+    <span class="fd-info-stat"><img class="fd-icon fd-icon--doc-info fd-icon--n3" src="https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_add-comment_outlined.22c29f01.svg" aria-hidden="true"><span>0</span></span>
+  </div>
+  <button class="fd-doc-info__ai" type="button"><span class="fd-icon fd-icon--doc-info fd-icon--ai-gradient" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_meeting-ai_filled.e7518902.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_meeting-ai_filled.e7518902.svg);" aria-hidden="true"></span><span>AI 速览</span></button>
+</div>
+<div class="doc-callout-block" data-tone="info" id="b-intro-note" data-block-id="b-intro-note" data-block-type="callout">
+<div class="doc-callout-block__top-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+<div class="doc-callout-block__content">
+<div class="doc-callout-block__emoji" aria-hidden="true">💡</div>
+<div class="doc-callout-block__main">
+<div class="doc-callout-block__title" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="title">一句话介绍</div>
+<div class="doc-callout-block__body" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">这个 Skill 用来把自然语言、截图、Figma 或结构化 JSON 转换为接近飞书文档真实体验的页面原型，适合做文档界面还原、模板预览、评审稿和工程交付前的视觉确认。</div>
+</div>
+</div>
+<div class="doc-callout-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h1" id="b-what" data-block-id="b-what" data-block-type="h1">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:26px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">这个 Skill 能做什么</div>
+</div>
+<div class="doc-heading-block__bottom-spacer" aria-hidden="true" style="height:10px"></div>
+</div>
+<div class="doc-text-block" data-variant="body" id="b-what-body" data-block-id="b-what-body" data-block-type="body">
+<div class="doc-text-block__top-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">它不是生成普通网页文章，而是先把需求转换成页面契约和文档 Block JSON，再用固定的飞书文档页面结构、语义 token、图标目录和区块渲染规则生成页面。</p>
+</div>
+<div class="doc-text-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-table-block" id="b-capability-table" data-block-id="b-capability-table" data-block-type="table">
+<div class="doc-table-block__top-spacer" aria-hidden="true" style="height:12px"></div>
+<div class="doc-table-block__scroll">
+<table class="doc-table-block__table">
+<thead>
+<tr class="doc-table-block__tr"><th class="doc-table-block__th" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="columns" data-column-index=0>能力</th>
+<th class="doc-table-block__th" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="columns" data-column-index=1>适合处理的问题</th>
+<th class="doc-table-block__th" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="columns" data-column-index=2>输出特点</th></tr>
+</thead>
+<tbody>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=0 data-cell-index=0>完整文档页搭建</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=0 data-cell-index=1>需要 Header、封面、目录、画布和评论区的飞书文档界面</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=0 data-cell-index=2>保持 64px 顶部栏、800px 文档画布和标准页面层级</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=1 data-cell-index=0>Block 级渲染</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=1 data-cell-index=1>需要标题、正文、列表、分栏、表格、代码块、图片、提示块等内容</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=1 data-cell-index=2>每个区块都有固定 DOM、间距和 token 样式</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=2 data-cell-index=0>静态可编辑原型</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=2 data-cell-index=1>需要同事直接体验编辑、目录跳转和待办勾选</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=2 data-cell-index=2>支持 contenteditable、JSON 同步、目录折叠和待办状态切换</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=3 data-cell-index=0>工程交付辅助</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=3 data-cell-index=1>需要把设计稿或说明转成工程可理解的结构</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=3 data-cell-index=2>先产出页面契约，再产出可验证的 JSON 和页面文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="doc-table-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:12px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-scenarios" data-block-id="b-scenarios" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">适用场景</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-list-block doc-bullet-list-block" data-variant="bulletList" id="b-scenario-list" data-block-id="b-scenario-list" data-block-type="bulletList">
+<div class="doc-list-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-list-block__list">
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--bullet" aria-hidden="true"></span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=0>把产品说明、PRD 或知识库内容快速变成飞书文档样式的页面。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--bullet" aria-hidden="true"></span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=1>根据截图或 Figma 还原文档编辑器界面，用于视觉走查。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--bullet" aria-hidden="true"></span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=2>为模板、教程、内部分享文档制作可交互的静态预览。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--bullet" aria-hidden="true"></span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=3>把文档内容整理成结构化 Block JSON，便于后续二次渲染或工程迁移。</span>
+</div>
+</div>
+<div class="doc-list-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-workflow" data-block-id="b-workflow" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">推荐工作流</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-list-block doc-ordered-list-block" data-variant="orderedList" id="b-workflow-list" data-block-id="b-workflow-list" data-block-type="orderedList">
+<div class="doc-list-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-list-block__list">
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">1.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=0>先确认页面类型：完整文档页、纯文档画布，还是嵌入式文档片段。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">2.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=1>把自然语言或截图信息转换为页面契约和 Block JSON。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">3.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=2>用校验脚本检查 Block 类型、字段和嵌套结构是否受支持。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">4.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=3>根据项目条件选择 React + UD 组件或静态 HTML 预览。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">5.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=4>运行结构、样式和文档编辑器身份检查，避免产出普通文章页。</span>
+</div>
+</div>
+<div class="doc-list-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-blocks" data-block-id="b-blocks" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">支持的文档区块</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-text-block" data-variant="body" id="b-blocks-body" data-block-id="b-blocks-body" data-block-type="body">
+<div class="doc-text-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">当前版本覆盖常见文档内容块，遇到附件、图表嵌入、Slash 菜单、多用户光标等未定义行为时，不会随意模拟，需要额外来源规则。</p>
+</div>
+<div class="doc-text-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-table-block" id="b-blocks-table" data-block-id="b-blocks-table" data-block-type="table">
+<div class="doc-table-block__top-spacer" aria-hidden="true" style="height:12px"></div>
+<div class="doc-table-block__scroll">
+<table class="doc-table-block__table">
+<thead>
+<tr class="doc-table-block__tr"><th class="doc-table-block__th" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="columns" data-column-index=0>区块类型</th>
+<th class="doc-table-block__th" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="columns" data-column-index=1>用途</th>
+<th class="doc-table-block__th" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="columns" data-column-index=2>注意事项</th></tr>
+</thead>
+<tbody>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=0 data-cell-index=0>topTitle / h1-h3 / body</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=0 data-cell-index=1>标题层级与正文段落</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=0 data-cell-index=2>保持飞书文档字号、行高和 spacer 合并规则</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=1 data-cell-index=0>bulletList / orderedList / todoList</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=1 data-cell-index=1>要点、步骤、检查项</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=1 data-cell-index=2>列表标记使用固定槽位，待办支持点击切换状态</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=2 data-cell-index=0>columns</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=2 data-cell-index=1>分栏排版</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=2 data-cell-index=2>适合教程截图与说明文字并排展示</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=3 data-cell-index=0>image</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=3 data-cell-index=1>插入截图或示例图</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=3 data-cell-index=2>需要明确图片来源，真实截图使用 provided</td>
+</tr>
+<tr class="doc-table-block__tr">
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=4 data-cell-index=0>table / codeBlock / callout</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=4 data-cell-index=1>对比、代码示例和提示说明</td>
+<td class="doc-table-block__td" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="rows" data-row-index=4 data-cell-index=2>使用文档区块 DOM，不替换为普通卡片或数据看板</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="doc-table-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:12px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h1" id="b-install" data-block-id="b-install" data-block-type="h1">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:26px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">安装教程</div>
+</div>
+<div class="doc-heading-block__bottom-spacer" aria-hidden="true" style="height:10px"></div>
+</div>
+<div class="doc-text-block" data-variant="body" id="b-install-body" data-block-id="b-install-body" data-block-type="body">
+<div class="doc-text-block__top-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">下面把你提供的三张截图整理为分栏教程：左侧保留操作证据截图，右侧给出同事可以直接照做的步骤。</p>
+</div>
+<div class="doc-text-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-install-package" data-block-id="b-install-package" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">方式一：准备本地 Skill 包</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-columns-block" id="b-install-package-columns" data-block-id="b-install-package-columns" data-block-type="columns">
+<div class="doc-columns-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-columns-block__grid" style="--doc-columns-count:2">
+<div class="doc-columns-block__column" data-column-index="0">
+<div class="doc-image-block" id="b-img-package" data-block-id="b-img-package" data-block-type="image">
+<div class="doc-image-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<figure class="doc-image-block__figure">
+<div class="doc-image-block__frame" data-source="provided" style="aspect-ratio:16 / 9">
+<img class="doc-image-block__image" src="assets/images/install-package.png" alt="Finder 中选中 lark-doc-prototype-1-0-tuned.zip 安装包">
+</div>
+<figcaption class="doc-image-block__caption" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="caption">图 1：在本地文件夹中准备 Skill 压缩包</figcaption>
+</figure>
+<div class="doc-image-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+<div class="doc-columns-block__column" data-column-index="1">
+<div class="doc-text-block" data-variant="body" id="b-install-package-text" data-block-id="b-install-package-text" data-block-type="body">
+<div class="doc-text-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">先在本地确认 Skill 资源包已经准备好。截图中选中的文件是 lark-doc-prototype-1-0-tuned.zip，适合作为分发或上传前的安装包。</p>
+</div>
+<div class="doc-text-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-list-block doc-ordered-list-block" data-variant="orderedList" id="b-install-package-steps" data-block-id="b-install-package-steps" data-block-type="orderedList">
+<div class="doc-list-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-list-block__list">
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">1.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=0>打开存放 Skill 包的文件夹，确认压缩包名称和版本。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">2.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=1>如果是团队共享，建议保留 tuned 或版本号后缀，方便同事识别来源。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">3.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=2>进入 TRAE Work 的插件市场后，再执行上传或安装。</span>
+</div>
+</div>
+<div class="doc-list-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+</div>
+<div class="doc-columns-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-install-market" data-block-id="b-install-market" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">方式二：在插件市场上传</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-columns-block" id="b-install-market-columns" data-block-id="b-install-market-columns" data-block-type="columns">
+<div class="doc-columns-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-columns-block__grid" style="--doc-columns-count:2">
+<div class="doc-columns-block__column" data-column-index="0">
+<div class="doc-text-block" data-variant="body" id="b-install-market-text" data-block-id="b-install-market-text" data-block-type="body">
+<div class="doc-text-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">进入 TRAE Work 的插件市场，切换到“技能”页签，点击“上传技能”。弹窗会提示支持拖放或点击上传，并说明需要包含根级 SKILL.md 文件的 zip 或 .skill 文件。</p>
+</div>
+<div class="doc-text-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-list-block doc-ordered-list-block" data-variant="orderedList" id="b-install-market-steps" data-block-id="b-install-market-steps" data-block-type="orderedList">
+<div class="doc-list-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-list-block__list">
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">1.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=0>点击左侧导航中的“插件市场”。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">2.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=1>在顶部切换到“技能”页签。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">3.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=2>点击右上角“上传技能”，把本地安装包拖入弹窗。</span>
+</div>
+<div class="doc-list-block__item" data-level="1">
+<span class="doc-list-block__marker doc-list-block__marker--ordered" aria-hidden="true">4.</span>
+<span class="doc-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=3>确认上传后，等待技能出现在列表中。</span>
+</div>
+</div>
+<div class="doc-list-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+<div class="doc-columns-block__column" data-column-index="1">
+<div class="doc-image-block" id="b-img-upload" data-block-id="b-img-upload" data-block-type="image">
+<div class="doc-image-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<figure class="doc-image-block__figure">
+<div class="doc-image-block__frame" data-source="provided" style="aspect-ratio:16 / 9">
+<img class="doc-image-block__image" src="assets/images/plugin-upload-modal.png" alt="插件市场上传技能弹窗">
+</div>
+<figcaption class="doc-image-block__caption" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="caption">图 2：上传技能弹窗</figcaption>
+</figure>
+<div class="doc-image-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+</div>
+<div class="doc-columns-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-install-check" data-block-id="b-install-check" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">安装后确认</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-columns-block" id="b-install-check-columns" data-block-id="b-install-check-columns" data-block-type="columns">
+<div class="doc-columns-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-columns-block__grid" style="--doc-columns-count:2">
+<div class="doc-columns-block__column" data-column-index="0">
+<div class="doc-image-block" id="b-img-market" data-block-id="b-img-market" data-block-type="image">
+<div class="doc-image-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<figure class="doc-image-block__figure">
+<div class="doc-image-block__frame" data-source="provided" style="aspect-ratio:16 / 9">
+<img class="doc-image-block__image" src="assets/images/plugin-market.png" alt="插件市场技能列表页面">
+</div>
+<figcaption class="doc-image-block__caption" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="caption">图 3：插件市场技能列表</figcaption>
+</figure>
+<div class="doc-image-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+<div class="doc-columns-block__column" data-column-index="1">
+<div class="doc-text-block" data-variant="body" id="b-install-check-text" data-block-id="b-install-check-text" data-block-type="body">
+<div class="doc-text-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">如果上传成功，技能会和其他 Skill 一样出现在列表中。后续同事只需要在任务中明确指定使用这个 Skill，就可以触发文档原型生成流程。</p>
+</div>
+<div class="doc-text-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-callout-block" data-tone="warning" id="b-install-check-callout" data-block-id="b-install-check-callout" data-block-type="callout">
+<div class="doc-callout-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-callout-block__content">
+<div class="doc-callout-block__emoji" aria-hidden="true">⚠️</div>
+<div class="doc-callout-block__main">
+<div class="doc-callout-block__title" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="title">检查点</div>
+<div class="doc-callout-block__body" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">如果上传失败，请先检查压缩包根目录是否包含 SKILL.md，以及文件是否被多包了一层目录。</div>
+</div>
+</div>
+<div class="doc-callout-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+</div>
+<div class="doc-columns-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h1" id="b-interactions" data-block-id="b-interactions" data-block-type="h1">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:26px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">这个页面里的基础交互</div>
+</div>
+<div class="doc-heading-block__bottom-spacer" aria-hidden="true" style="height:10px"></div>
+</div>
+<div class="doc-list-block doc-todo-list-block" data-variant="todoList" id="b-interactions-list" data-block-id="b-interactions-list" data-block-type="todoList">
+<div class="doc-list-block__top-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+<div class="doc-list-block__list doc-todo-list-block__list"><div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="0"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=0>点击左侧目录项可以跳转到对应章节。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="1"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=1>点击目录折叠按钮可以收起或展开目录。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="2"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=2>直接编辑正文、标题、表格单元格和列表项，页面会同步更新内置 JSON。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="3"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=3>点击待办复选框可以切换完成状态，并写回 Block JSON。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item" data-level="1" data-checked="false">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为已完成" aria-pressed="false" data-todo-toggle data-item-index="4"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=4>清空受支持文本块后按 Delete 或 Backspace，可以从画布和 JSON 中删除该块。</span>
+</div></div>
+<div class="doc-list-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h2" id="b-contract" data-block-id="b-contract" data-block-type="h2">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:22px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">本页页面契约摘要</div>
+</div>
+<div class="doc-heading-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-code-block" data-language="yaml" id="b-contract-code" data-block-id="b-contract-code" data-block-type="codeBlock">
+<div class="doc-code-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-code-block__frame">
+<div class="doc-code-block__title">页面契约</div>
+<div class="doc-code-block__body">
+<ol class="doc-code-block__line-numbers" aria-hidden="true"><li class="doc-code-block__line-number">1</li>
+<li class="doc-code-block__line-number">2</li>
+<li class="doc-code-block__line-number">3</li>
+<li class="doc-code-block__line-number">4</li>
+<li class="doc-code-block__line-number">5</li>
+<li class="doc-code-block__line-number">6</li>
+<li class="doc-code-block__line-number">7</li>
+<li class="doc-code-block__line-number">8</li>
+<li class="doc-code-block__line-number">9</li>
+<li class="doc-code-block__line-number">10</li>
+<li class="doc-code-block__line-number">11</li>
+<li class="doc-code-block__line-number">12</li>
+<li class="doc-code-block__line-number">13</li>
+<li class="doc-code-block__line-number">14</li>
+<li class="doc-code-block__line-number">15</li>
+<li class="doc-code-block__line-number">16</li>
+<li class="doc-code-block__line-number">17</li>
+<li class="doc-code-block__line-number">18</li>
+<li class="doc-code-block__line-number">19</li>
+<li class="doc-code-block__line-number">20</li>
+<li class="doc-code-block__line-number">21</li>
+<li class="doc-code-block__line-number">22</li>
+<li class="doc-code-block__line-number">23</li>
+<li class="doc-code-block__line-number">24</li>
+<li class="doc-code-block__line-number">25</li>
+<li class="doc-code-block__line-number">26</li>
+<li class="doc-code-block__line-number">27</li>
+<li class="doc-code-block__line-number">28</li>
+<li class="doc-code-block__line-number">29</li>
+<li class="doc-code-block__line-number">30</li></ol>
+<pre class="doc-code-block__pre"><code class="doc-code-block__code" data-highlighted="true" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text"><span class="doc-code-block__code-line">document_surface<span class="doc-code-token doc-code-token--operator">:</span> full_doc_page</span><span class="doc-code-block__code-line">source_basis<span class="doc-code-token doc-code-token--operator">:</span> natural_language <span class="doc-code-token doc-code-token--operator">+</span> uploaded_screenshots</span><span class="doc-code-block__code-line">output_mode<span class="doc-code-token doc-code-token--operator">:</span> static_html</span><span class="doc-code-block__code-line">implementation_mode<span class="doc-code-token doc-code-token--operator">:</span> static_html_preview</span><span class="doc-code-block__code-line">static_ud_fallback<span class="doc-code-token doc-code-token--operator">:</span> <span class="doc-code-token doc-code-token--keyword">true</span></span><span class="doc-code-block__code-line">page_layers<span class="doc-code-token doc-code-token--operator">:</span></span><span class="doc-code-block__code-line">  header<span class="doc-code-token doc-code-token--operator">:</span> <span class="doc-code-token doc-code-token--keyword">true</span></span><span class="doc-code-block__code-line">  cover<span class="doc-code-token doc-code-token--operator">:</span> <span class="doc-code-token doc-code-token--keyword">true</span></span><span class="doc-code-block__code-line">  catalog<span class="doc-code-token doc-code-token--operator">:</span> <span class="doc-code-token doc-code-token--keyword">true</span></span><span class="doc-code-block__code-line">  canvas<span class="doc-code-token doc-code-token--operator">:</span> <span class="doc-code-token doc-code-token--keyword">true</span></span><span class="doc-code-block__code-line">  comment_panel<span class="doc-code-token doc-code-token--operator">:</span> <span class="doc-code-token doc-code-token--keyword">false</span></span><span class="doc-code-block__code-line">surface_mode<span class="doc-code-token doc-code-token--operator">:</span> editing</span><span class="doc-code-block__code-line">body_width<span class="doc-code-token doc-code-token--operator">:</span> 800px</span><span class="doc-code-block__code-line">supported_blocks<span class="doc-code-token doc-code-token--operator">:</span></span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> topTitle</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> h1</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> h2</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> body</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> bulletList</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> orderedList</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> todoList</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> table</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> image</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> columns</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> codeBlock</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> callout</span><span class="doc-code-block__code-line">verification<span class="doc-code-token doc-code-token--operator">:</span></span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> validate_json</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> render_html</span><span class="doc-code-block__code-line">  <span class="doc-code-token doc-code-token--operator">-</span> static_check</span></code></pre>
+<div class="doc-code-block__right-gutter" aria-hidden="true"></div>
+</div>
+</div>
+<div class="doc-code-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-heading-block" data-variant="h1" id="b-check" data-block-id="b-check" data-block-type="h1">
+<div class="doc-heading-block__top-spacer" aria-hidden="true" style="height:26px"></div>
+<div class="doc-heading-block__text-wrap">
+<div class="doc-heading-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">给同事使用前的检查</div>
+</div>
+<div class="doc-heading-block__bottom-spacer" aria-hidden="true" style="height:10px"></div>
+</div>
+<div class="doc-quote-block" id="b-check-quote" data-block-id="b-check-quote" data-block-type="quote">
+<div class="doc-quote-block__top-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+<blockquote class="doc-quote-block__content" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">判断页面是否合格的标准不是“看起来像一篇排版漂亮的文章”，而是“看起来像飞书文档编辑器里的真实文档”。</blockquote>
+<div class="doc-quote-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-list-block doc-todo-list-block" data-variant="todoList" id="b-check-list" data-block-id="b-check-list" data-block-type="todoList">
+<div class="doc-list-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-list-block__list doc-todo-list-block__list"><div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="0"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=0>页面包含固定 Header、封面、左侧目录和中间文档画布。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="1"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=1>正文使用支持的文档 Block，不使用营销页卡片或普通 Markdown 包装。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="2"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=2>安装截图已经以图片区块形式放入教程模块。</span>
+</div>
+<div class="doc-list-block__item doc-todo-list-block__item is-checked" data-level="1" data-checked="true">
+<button class="doc-todo-list-block__checkbox" type="button" aria-label="标记为未完成" aria-pressed="true" data-todo-toggle data-item-index="3"><span class="fd-icon doc-todo-list-block__check-icon" style="-webkit-mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);mask-image:url(https://cdn-tos-cn.bytedance.net/obj/archi/ee/es-design-base/svgs/icon_check_outlined.e379e045.svg);" aria-hidden="true"></span></button>
+<span class="doc-list-block__text doc-todo-list-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="items" data-item-index=3>目录、待办、编辑状态和 JSON 同步交互已经接入。</span>
+</div></div>
+<div class="doc-list-block__bottom-spacer is-collapsed" aria-hidden="true" style="height:8px"></div>
+</div>
+<div class="doc-text-block" data-variant="body" id="b-closing" data-block-id="b-closing" data-block-type="body">
+<div class="doc-text-block__top-spacer" aria-hidden="true" style="height:8px"></div>
+<div class="doc-text-block__text-wrap">
+<p class="doc-text-block__text" contenteditable="true" spellcheck="false" data-editable="true" data-block-field="text">建议把这份页面作为团队内介绍材料：同事先浏览能力和安装方式，再直接在页面里试编辑、折叠目录、勾选待办，理解这个 Skill 的输出边界。</p>
+</div>
+<div class="doc-text-block__bottom-spacer" aria-hidden="true" style="height:8px"></div>
+</div>
+</div>
+</article>
+
+</section>
+
+    <div class="fd-reading-progress" aria-hidden="true"><div class="fd-reading-progress__bar"></div></div>
+    <div class="fd-floating-layer" aria-label="文档原型交互">
+      <button class="fd-floating-layer__button" type="button" data-proto-action="toggle-mode">切换阅读</button>
+      <button class="fd-floating-layer__button" type="button" data-proto-action="copy-json">复制 JSON</button>
+      <button class="fd-floating-layer__button" type="button" data-proto-action="search">搜索文档</button>
+      <button class="fd-floating-layer__button" type="button" data-proto-action="scroll-top">回到顶部</button>
+    </div>
+    <div class="fd-prototype-toast" aria-live="polite"></div>
+
+</main>
+</div>
+<script>
+(() => {
+  const area = document.querySelector(".fd-content-area");
+  const catalog = document.querySelector(".fd-catalog");
+  const toggle = document.querySelector("[data-catalog-toggle]");
+  if (!area || !catalog || !toggle) return;
+  const readPxVar = (name, fallback) => {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const value = Number.parseFloat(raw);
+    return Number.isFinite(value) ? value : fallback;
+  };
+  let ticking = false;
+  const syncSticky = () => {
+    const headerHeight = readPxVar("--fd-header-height", 64);
+    const stickyGap = readPxVar("--fd-catalog-sticky-gap", 36);
+    const stickyTop = headerHeight + stickyGap;
+    const startY = area.getBoundingClientRect().top + window.scrollY;
+    const stuck = window.scrollY + stickyTop >= startY;
+    catalog.classList.toggle("fd-catalog--stuck", stuck);
+  };
+  const requestStickySync = () => {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      syncSticky();
+      ticking = false;
+    });
+  };
+  const sync = () => {
+    const collapsed = area.classList.contains("fd-content-area--catalog-collapsed");
+    area.dataset.catalog = collapsed ? "collapsed" : "visible";
+    toggle.setAttribute("aria-expanded", String(!collapsed));
+    toggle.setAttribute("aria-label", collapsed ? "展开目录" : "收起目录");
+    syncSticky();
+  };
+  toggle.addEventListener("click", () => {
+    area.classList.toggle("fd-content-area--catalog-collapsed");
+    sync();
+  });
+  window.addEventListener("scroll", requestStickySync, { passive: true });
+  window.addEventListener("resize", requestStickySync);
+  sync();
+})();
+</script>
+<script type="application/json" id="fd-block-json">{"meta": {"title": "lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明", "owner": "TRAE Skill Team", "docOwner": "郭寒", "updatedAt": "最近修改：2026-07-07 16:40", "modifiedLabel": "今天 16:40 更新", "createdLabel": "由 TRAE 创建", "security": "L2-内部", "workspace": "TRAE Work", "breadcrumbNodes": ["TRAE Work", "技能库", "文档原型", "lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明"], "collaborators": [{"name": "陈晨", "badge": "green"}, {"name": "张敏", "badge": "blue"}, {"name": "林一", "badge": "orange"}], "collaboratorCount": 6, "visitors": 28, "views": 126, "likes": 9, "commentCount": 0, "coverImage": "assets/images/doc-cover.png"}, "page": {"showHeader": true, "showCover": true, "showCatalog": true, "showComments": false, "showDocInfo": true, "mode": "editing"}, "comments": [], "blocks": [{"id": "title", "type": "topTitle", "text": "lark-doc-prototype-1-0：飞书文档原型 Skill 使用说明"}, {"id": "b-intro-note", "type": "callout", "tone": "info", "emoji": "💡", "title": "一句话介绍", "text": "这个 Skill 用来把自然语言、截图、Figma 或结构化 JSON 转换为接近飞书文档真实体验的页面原型，适合做文档界面还原、模板预览、评审稿和工程交付前的视觉确认。"}, {"id": "b-what", "type": "h1", "text": "这个 Skill 能做什么"}, {"id": "b-what-body", "type": "body", "text": "它不是生成普通网页文章，而是先把需求转换成页面契约和文档 Block JSON，再用固定的飞书文档页面结构、语义 token、图标目录和区块渲染规则生成页面。"}, {"id": "b-capability-table", "type": "table", "columns": ["能力", "适合处理的问题", "输出特点"], "rows": [["完整文档页搭建", "需要 Header、封面、目录、画布和评论区的飞书文档界面", "保持 64px 顶部栏、800px 文档画布和标准页面层级"], ["Block 级渲染", "需要标题、正文、列表、分栏、表格、代码块、图片、提示块等内容", "每个区块都有固定 DOM、间距和 token 样式"], ["静态可编辑原型", "需要同事直接体验编辑、目录跳转和待办勾选", "支持 contenteditable、JSON 同步、目录折叠和待办状态切换"], ["工程交付辅助", "需要把设计稿或说明转成工程可理解的结构", "先产出页面契约，再产出可验证的 JSON 和页面文件"]]}, {"id": "b-scenarios", "type": "h2", "text": "适用场景"}, {"id": "b-scenario-list", "type": "bulletList", "items": [{"text": "把产品说明、PRD 或知识库内容快速变成飞书文档样式的页面。", "level": 1}, {"text": "根据截图或 Figma 还原文档编辑器界面，用于视觉走查。", "level": 1}, {"text": "为模板、教程、内部分享文档制作可交互的静态预览。", "level": 1}, {"text": "把文档内容整理成结构化 Block JSON，便于后续二次渲染或工程迁移。", "level": 1}]}, {"id": "b-workflow", "type": "h2", "text": "推荐工作流"}, {"id": "b-workflow-list", "type": "orderedList", "items": [{"text": "先确认页面类型：完整文档页、纯文档画布，还是嵌入式文档片段。", "level": 1}, {"text": "把自然语言或截图信息转换为页面契约和 Block JSON。", "level": 1}, {"text": "用校验脚本检查 Block 类型、字段和嵌套结构是否受支持。", "level": 1}, {"text": "根据项目条件选择 React + UD 组件或静态 HTML 预览。", "level": 1}, {"text": "运行结构、样式和文档编辑器身份检查，避免产出普通文章页。", "level": 1}]}, {"id": "b-blocks", "type": "h2", "text": "支持的文档区块"}, {"id": "b-blocks-body", "type": "body", "text": "当前版本覆盖常见文档内容块，遇到附件、图表嵌入、Slash 菜单、多用户光标等未定义行为时，不会随意模拟，需要额外来源规则。"}, {"id": "b-blocks-table", "type": "table", "columns": ["区块类型", "用途", "注意事项"], "rows": [["topTitle / h1-h3 / body", "标题层级与正文段落", "保持飞书文档字号、行高和 spacer 合并规则"], ["bulletList / orderedList / todoList", "要点、步骤、检查项", "列表标记使用固定槽位，待办支持点击切换状态"], ["columns", "分栏排版", "适合教程截图与说明文字并排展示"], ["image", "插入截图或示例图", "需要明确图片来源，真实截图使用 provided"], ["table / codeBlock / callout", "对比、代码示例和提示说明", "使用文档区块 DOM，不替换为普通卡片或数据看板"]]}, {"id": "b-install", "type": "h1", "text": "安装教程"}, {"id": "b-install-body", "type": "body", "text": "下面把你提供的三张截图整理为分栏教程：左侧保留操作证据截图，右侧给出同事可以直接照做的步骤。"}, {"id": "b-install-package", "type": "h2", "text": "方式一：准备本地 Skill 包"}, {"id": "b-install-package-columns", "type": "columns", "columns": [{"blocks": [{"id": "b-img-package", "type": "image", "source": "provided", "src": "assets/images/install-package.png", "alt": "Finder 中选中 lark-doc-prototype-1-0-tuned.zip 安装包", "caption": "图 1：在本地文件夹中准备 Skill 压缩包", "aspectRatio": "16:9"}]}, {"blocks": [{"id": "b-install-package-text", "type": "body", "text": "先在本地确认 Skill 资源包已经准备好。截图中选中的文件是 lark-doc-prototype-1-0-tuned.zip，适合作为分发或上传前的安装包。"}, {"id": "b-install-package-steps", "type": "orderedList", "items": [{"text": "打开存放 Skill 包的文件夹，确认压缩包名称和版本。", "level": 1}, {"text": "如果是团队共享，建议保留 tuned 或版本号后缀，方便同事识别来源。", "level": 1}, {"text": "进入 TRAE Work 的插件市场后，再执行上传或安装。", "level": 1}]}]}]}, {"id": "b-install-market", "type": "h2", "text": "方式二：在插件市场上传"}, {"id": "b-install-market-columns", "type": "columns", "columns": [{"blocks": [{"id": "b-install-market-text", "type": "body", "text": "进入 TRAE Work 的插件市场，切换到“技能”页签，点击“上传技能”。弹窗会提示支持拖放或点击上传，并说明需要包含根级 SKILL.md 文件的 zip 或 .skill 文件。"}, {"id": "b-install-market-steps", "type": "orderedList", "items": [{"text": "点击左侧导航中的“插件市场”。", "level": 1}, {"text": "在顶部切换到“技能”页签。", "level": 1}, {"text": "点击右上角“上传技能”，把本地安装包拖入弹窗。", "level": 1}, {"text": "确认上传后，等待技能出现在列表中。", "level": 1}]}]}, {"blocks": [{"id": "b-img-upload", "type": "image", "source": "provided", "src": "assets/images/plugin-upload-modal.png", "alt": "插件市场上传技能弹窗", "caption": "图 2：上传技能弹窗", "aspectRatio": "16:9"}]}]}, {"id": "b-install-check", "type": "h2", "text": "安装后确认"}, {"id": "b-install-check-columns", "type": "columns", "columns": [{"blocks": [{"id": "b-img-market", "type": "image", "source": "provided", "src": "assets/images/plugin-market.png", "alt": "插件市场技能列表页面", "caption": "图 3：插件市场技能列表", "aspectRatio": "16:9"}]}, {"blocks": [{"id": "b-install-check-text", "type": "body", "text": "如果上传成功，技能会和其他 Skill 一样出现在列表中。后续同事只需要在任务中明确指定使用这个 Skill，就可以触发文档原型生成流程。"}, {"id": "b-install-check-callout", "type": "callout", "tone": "warning", "emoji": "⚠️", "title": "检查点", "text": "如果上传失败，请先检查压缩包根目录是否包含 SKILL.md，以及文件是否被多包了一层目录。"}]}]}, {"id": "b-interactions", "type": "h1", "text": "这个页面里的基础交互"}, {"id": "b-interactions-list", "type": "todoList", "items": [{"text": "点击左侧目录项可以跳转到对应章节。", "level": 1, "checked": true}, {"text": "点击目录折叠按钮可以收起或展开目录。", "level": 1, "checked": true}, {"text": "直接编辑正文、标题、表格单元格和列表项，页面会同步更新内置 JSON。", "level": 1, "checked": true}, {"text": "点击待办复选框可以切换完成状态，并写回 Block JSON。", "level": 1, "checked": true}, {"text": "清空受支持文本块后按 Delete 或 Backspace，可以从画布和 JSON 中删除该块。", "level": 1, "checked": false}]}, {"id": "b-contract", "type": "h2", "text": "本页页面契约摘要"}, {"id": "b-contract-code", "type": "codeBlock", "language": "yaml", "title": "页面契约", "text": "document_surface: full_doc_page\nsource_basis: natural_language + uploaded_screenshots\noutput_mode: static_html\nimplementation_mode: static_html_preview\nstatic_ud_fallback: true\npage_layers:\n  header: true\n  cover: true\n  catalog: true\n  canvas: true\n  comment_panel: false\nsurface_mode: editing\nbody_width: 800px\nsupported_blocks:\n  - topTitle\n  - h1\n  - h2\n  - body\n  - bulletList\n  - orderedList\n  - todoList\n  - table\n  - image\n  - columns\n  - codeBlock\n  - callout\nverification:\n  - validate_json\n  - render_html\n  - static_check"}, {"id": "b-check", "type": "h1", "text": "给同事使用前的检查"}, {"id": "b-check-quote", "type": "quote", "text": "判断页面是否合格的标准不是“看起来像一篇排版漂亮的文章”，而是“看起来像飞书文档编辑器里的真实文档”。"}, {"id": "b-check-list", "type": "todoList", "items": [{"text": "页面包含固定 Header、封面、左侧目录和中间文档画布。", "level": 1, "checked": true}, {"text": "正文使用支持的文档 Block，不使用营销页卡片或普通 Markdown 包装。", "level": 1, "checked": true}, {"text": "安装截图已经以图片区块形式放入教程模块。", "level": 1, "checked": true}, {"text": "目录、待办、编辑状态和 JSON 同步交互已经接入。", "level": 1, "checked": true}]}, {"id": "b-closing", "type": "body", "text": "建议把这份页面作为团队内介绍材料：同事先浏览能力和安装方式，再直接在页面里试编辑、折叠目录、勾选待办，理解这个 Skill 的输出边界。"}]}</script>
+<script>
+(() => {
+  const jsonEl = document.getElementById("fd-block-json");
+  const body = document.querySelector(".doc-body");
+  if (!jsonEl || !body) return;
+  const state = JSON.parse(jsonEl.textContent);
+  const deleteWhenEmptyTypes = new Set(["h1", "h2", "h3", "body", "quote", "callout", "bulletList", "orderedList", "todoList"]);
+  const headingTypes = new Set(["topTitle", "h1", "h2", "h3"]);
+  const supportedTypes = new Set([
+    "topTitle", "h1", "h2", "h3", "h4", "h5-h9", "body",
+    "bulletList", "orderedList", "todoList", "link", "image", "columns", "quote", "table", "codeBlock", "callout", "divider"
+  ]);
+
+  const textOf = (node) => (node.textContent || "").replace(/\u00a0/g, " ");
+  const trimmedTextOf = (node) => textOf(node).trim();
+  const columnBlocks = (block) => block?.type === "columns" && Array.isArray(block.columns)
+    ? block.columns.flatMap((column) => Array.isArray(column?.blocks) ? column.blocks : [])
+    : [];
+  const walkBlocks = (blocks, callback) => {
+    if (!Array.isArray(blocks)) return;
+    blocks.forEach((block, index) => {
+      callback(block, index, blocks);
+      if (block?.type === "columns" && Array.isArray(block.columns)) {
+        block.columns.forEach((column) => walkBlocks(column?.blocks, callback));
+      }
+    });
+  };
+  const blockEntryById = (id, blocks = state.blocks) => {
+    if (!Array.isArray(blocks)) return null;
+    for (let index = 0; index < blocks.length; index += 1) {
+      const block = blocks[index];
+      if (String(block?.id || "") === String(id)) return { block, index, blocks };
+      if (block?.type === "columns" && Array.isArray(block.columns)) {
+        for (const column of block.columns) {
+          const entry = blockEntryById(id, column?.blocks);
+          if (entry) return entry;
+        }
+      }
+    }
+    return null;
+  };
+  const blockById = (id) => blockEntryById(id)?.block;
+  const blockElementById = (id) => body.querySelector(`[data-block-id="${CSS.escape(String(id))}"]`);
+  const itemText = (item) => typeof item === "object" && item !== null ? String(item.text || "") : String(item || "");
+  const inlineText = (content) => Array.isArray(content)
+    ? content.map((item) => item?.type === "mention" ? String(item.name || "") : String(item?.text || "")).join("")
+    : "";
+  const blockTitle = (block) => (block.title || inlineText(block.content) || block.text || block.url || block.items?.map(itemText).join(" ") || "").trim();
+  const validInlineContent = (content) => Array.isArray(content) && content.length > 0 && content.every((item) => {
+    if (!item || typeof item !== "object") return false;
+    if (item.type === "text") return typeof item.text === "string" && item.text.trim().length > 0;
+    if (item.type === "mention") {
+      return typeof item.name === "string" && item.name.trim().length > 0 &&
+        (item.isSelf === undefined || typeof item.isSelf === "boolean") &&
+        (item.userId === undefined || (typeof item.userId === "string" && item.userId.trim().length > 0)) &&
+        (item.avatarSrc === undefined || (typeof item.avatarSrc === "string" && item.avatarSrc.trim().length > 0));
+    }
+    return false;
+  }) && inlineText(content).trim().length > 0;
+  const validListItem = (item, type) => {
+    if (typeof item === "string") return item.trim().length > 0;
+    if (!item || typeof item !== "object") return false;
+    if (typeof item.text !== "string" || !item.text.trim()) return false;
+    if (item.level !== undefined && ![1, 2, 3].includes(Number(item.level))) return false;
+    if (type === "todoList") return typeof item.checked === "boolean";
+    return item.checked === undefined;
+  };
+
+  const validBlock = (block, index, blocks) => {
+      if (!supportedTypes.has(block.type)) return false;
+      if (block.type === "divider") return true;
+      if (["bulletList", "orderedList", "todoList"].includes(block.type)) {
+        return Array.isArray(block.items) &&
+          block.items.length > 0 &&
+          block.items.every((item) => validListItem(item, block.type));
+      }
+      if (block.type === "table") {
+        return Array.isArray(block.columns) && block.columns.length > 0 &&
+          Array.isArray(block.rows) && block.rows.length > 0 &&
+          block.rows.every((row) => Array.isArray(row) && row.length === block.columns.length);
+      }
+      if (block.type === "link") {
+        return typeof block.url === "string" && block.url.trim().length > 0 &&
+          (block.title === undefined || (typeof block.title === "string" && block.title.trim().length > 0)) &&
+          (block.text === undefined || (typeof block.text === "string" && block.text.trim().length > 0));
+      }
+      if (block.type === "image") {
+        const source = block.source || (block.src ? "provided" : "placeholder");
+        if (!["provided", "generated", "placeholder"].includes(source)) return false;
+        if (!["16:9", "4:3", "3:2", "1:1", undefined].includes(block.aspectRatio)) return false;
+        if (source === "provided" || source === "generated") {
+          return typeof block.src === "string" && block.src.trim().length > 0 &&
+            typeof block.alt === "string" && block.alt.trim().length > 0;
+        }
+        return block.src === undefined || (typeof block.src === "string" && block.src.trim().length > 0);
+      }
+      if (block.type === "columns") {
+        return Array.isArray(block.columns) &&
+          [2, 3, 4].includes(block.columns.length) &&
+          block.columns.every((column) =>
+            column && typeof column === "object" &&
+            Array.isArray(column.blocks) &&
+            column.blocks.every((child, childIndex) => validBlock(child, childIndex, column.blocks))
+          );
+      }
+      const isTrailingPlaceholderBody = blocks === state.blocks && block.type === "body" && block.placeholder === true && index === state.blocks.length - 1;
+      if (isTrailingPlaceholderBody) return typeof block.text === "string";
+      if (["topTitle", "h1", "h2", "h3", "h4", "h5-h9", "body"].includes(block.type) && block.content !== undefined) {
+        return validInlineContent(block.content);
+      }
+      return typeof block.text === "string" && block.text.trim().length > 0;
+  };
+
+  const validateState = () => {
+    if (!Array.isArray(state.blocks) || state.blocks.length === 0) return false;
+    return state.blocks.every((block, index) => validBlock(block, index, state.blocks));
+  };
+
+  const syncJson = () => {
+    state.meta = state.meta || {};
+    const blockWordCount = (block) => {
+      if (block.type === "link") return [block.title, block.text, block.url].filter((value) => typeof value === "string").join("").trim().length;
+      if (block.type === "image") return [block.alt, block.caption].filter((value) => typeof value === "string").join("").trim().length;
+      if (block.type === "columns") return columnBlocks(block).reduce((sum, child) => sum + blockWordCount(child), 0);
+      if (Array.isArray(block.content)) return inlineText(block.content).trim().length;
+      if (typeof block.text === "string") return block.text.trim().length;
+      if (Array.isArray(block.items)) return block.items.map(itemText).join("").trim().length;
+      if (Array.isArray(block.rows)) return block.rows.flat().join("").trim().length;
+      return 0;
+    };
+    state.meta.wordCount = state.blocks.reduce((total, block) => total + blockWordCount(block), 0);
+    jsonEl.textContent = JSON.stringify(state, null, 2);
+    body.dataset.wordCount = String(state.meta.wordCount);
+    body.dataset.jsonValid = String(validateState());
+    window.fdDocEditor = {
+      state,
+      getJSON: () => JSON.parse(JSON.stringify(state)),
+      validate: validateState,
+      insertBlock,
+      deleteBlockById
+    };
+  };
+
+  const syncCatalog = () => {
+    const list = document.querySelector(".fd-catalog__items");
+    if (!list) return;
+    const html = state.blocks
+      .filter((block) => headingTypes.has(block.type) && blockTitle(block))
+      .map((block) => {
+        const level = block.type === "topTitle" ? 0 : Number(block.type.slice(1));
+        const link = document.createElement("a");
+        link.className = `fd-catalog__item fd-catalog__item--l${level}`;
+        link.href = `#${block.id}`;
+        link.textContent = blockTitle(block);
+        return link.outerHTML;
+      })
+      .join("");
+    list.innerHTML = html || '<span class="fd-catalog__item fd-catalog__item--l0">文档大标题</span>';
+  };
+
+  const syncComments = () => {
+    const ids = new Set();
+    walkBlocks(state.blocks, (block) => ids.add(String(block.id || "")));
+    state.comments = (state.comments || []).filter((comment) => !comment.anchor || ids.has(String(comment.anchor)));
+    document.querySelectorAll("[data-comment-anchor]").forEach((node) => {
+      if (!ids.has(String(node.dataset.commentAnchor))) node.remove();
+    });
+  };
+
+  const focusNear = (blocks, index) => {
+    const next = blocks[index] || blocks[index - 1];
+    if (!next) return;
+    const target = blockElementById(next.id)?.querySelector("[data-editable='true']");
+    if (target) {
+      target.focus();
+      document.getSelection()?.collapse(target, target.childNodes.length);
+    }
+  };
+
+  const shouldKeepEmptyBodyPlaceholder = (block, index) => {
+    if (block.type !== "body") return false;
+    const bodyCount = state.blocks.filter((item) => item.type === "body").length;
+    return bodyCount === 1 && index === state.blocks.length - 1;
+  };
+
+  function deleteBlockById(blockId) {
+    const entry = blockEntryById(blockId);
+    if (!entry) return false;
+    const { block, index, blocks } = entry;
+    if (block.type === "topTitle") return false;
+    if (blocks === state.blocks && shouldKeepEmptyBodyPlaceholder(block, index)) {
+      block.text = "";
+      block.placeholder = true;
+      syncJson();
+      return false;
+    }
+    blocks.splice(index, 1);
+    blockElementById(blockId)?.remove();
+    syncCatalog();
+    syncComments();
+    syncJson();
+    focusNear(blocks, index);
+    return true;
+  }
+
+  const blockIsEmpty = (block) => {
+    if (!block || block.type === "topTitle") return false;
+    if (["bulletList", "orderedList", "todoList"].includes(block.type)) {
+      return !block.items || block.items.every((item) => !itemText(item).trim());
+    }
+    if (["h1", "h2", "h3", "body", "quote", "callout"].includes(block.type)) {
+      return !String(block.text || "").trim();
+    }
+    return false;
+  };
+
+  const updateBlockFromEditable = (editable) => {
+    const blockEl = editable.closest("[data-block-id]");
+    if (!blockEl) return;
+    const block = blockById(blockEl.dataset.blockId);
+    if (!block) return;
+    const field = editable.dataset.blockField;
+    const value = textOf(editable);
+    if (field === "items") {
+      const itemIndex = Number(editable.dataset.itemIndex || 0);
+      const item = block.items[itemIndex];
+      if (item && typeof item === "object") item.text = value;
+      else block.items[itemIndex] = value;
+    } else if (field === "columns") {
+      const columnIndex = Number(editable.dataset.columnIndex || 0);
+      block.columns[columnIndex] = value;
+    } else if (field === "rows") {
+      const rowIndex = Number(editable.dataset.rowIndex || 0);
+      const cellIndex = Number(editable.dataset.cellIndex || 0);
+      block.rows[rowIndex][cellIndex] = value;
+    } else {
+      if (field === "text" && Array.isArray(block.content)) delete block.content;
+      block[field || "text"] = value;
+      if (field === "text" && block.type === "body" && value.trim()) delete block.placeholder;
+    }
+    syncCatalog();
+    syncJson();
+  };
+
+  const syncTodoItemElement = (itemEl, checked) => {
+    itemEl.classList.toggle("is-checked", checked);
+    itemEl.dataset.checked = String(checked);
+    const toggle = itemEl.querySelector("[data-todo-toggle]");
+    if (toggle) {
+      toggle.setAttribute("aria-pressed", String(checked));
+      toggle.setAttribute("aria-label", checked ? "标记为未完成" : "标记为已完成");
+    }
+  };
+
+  const toggleTodoItem = (toggle) => {
+    const blockEl = toggle.closest("[data-block-id]");
+    const itemEl = toggle.closest(".doc-todo-list-block__item");
+    if (!blockEl || !itemEl) return;
+    const block = blockById(blockEl.dataset.blockId);
+    if (!block || block.type !== "todoList" || !Array.isArray(block.items)) return;
+    const itemIndex = Number(toggle.dataset.itemIndex || 0);
+    const item = block.items[itemIndex];
+    if (!item || typeof item !== "object") {
+      block.items[itemIndex] = { text: itemText(item), level: Number(itemEl.dataset.level || 1), checked: true };
+      syncTodoItemElement(itemEl, true);
+    } else {
+      item.checked = !Boolean(item.checked);
+      syncTodoItemElement(itemEl, item.checked);
+    }
+    syncJson();
+  };
+
+  function insertBlock(type = "body", index = state.blocks.length, seed = {}) {
+    if (!supportedTypes.has(type)) throw new Error(`Unsupported block type: ${type}`);
+    const id = seed.id || `block-${Date.now().toString(36)}`;
+    const block = { id, type, ...seed };
+    if (["h1", "h2", "h3", "h4", "h5-h9", "body", "quote"].includes(type)) block.text ??= "";
+    if (["bulletList", "orderedList"].includes(type)) block.items ??= [{ text: "", level: 1 }];
+    if (type === "todoList") block.items ??= [{ text: "", level: 1, checked: false }];
+    if (type === "callout") block.text ??= "";
+    if (type === "table") {
+      block.columns ??= ["字段"];
+      block.rows ??= [[""]];
+    }
+    if (type === "codeBlock") block.text ??= "";
+    if (type === "link") {
+      block.url ??= "https://example.com";
+      block.title ??= block.url;
+      block.text ??= block.url;
+    }
+    if (type === "image") {
+      block.source ??= "placeholder";
+      block.alt ??= "图片占位图";
+      block.aspectRatio ??= "16:9";
+    }
+    if (type === "columns") {
+      block.columns ??= [{ blocks: [] }, { blocks: [] }];
+    }
+    state.blocks.splice(index, 0, block);
+    syncJson();
+    return block;
+  }
+
+  body.addEventListener("input", (event) => {
+    const editable = event.target.closest?.("[data-editable='true']");
+    if (!editable) return;
+    updateBlockFromEditable(editable);
+  });
+
+  body.addEventListener("click", (event) => {
+    const toggle = event.target.closest?.("[data-todo-toggle]");
+    if (!toggle) return;
+    event.preventDefault();
+    toggleTodoItem(toggle);
+  });
+
+  body.addEventListener("keydown", (event) => {
+    if (event.key !== "Backspace" && event.key !== "Delete") return;
+    const editable = event.target.closest?.("[data-editable='true']");
+    if (!editable || trimmedTextOf(editable)) return;
+    const blockEl = editable.closest("[data-block-id]");
+    const block = blockById(blockEl?.dataset.blockId);
+    if (!block || !deleteWhenEmptyTypes.has(block.type)) return;
+    updateBlockFromEditable(editable);
+    if (blockIsEmpty(block)) {
+      event.preventDefault();
+      deleteBlockById(blockEl.dataset.blockId);
+    }
+  });
+
+  body.addEventListener("blur", (event) => {
+    const editable = event.target.closest?.("[data-editable='true']");
+    if (!editable) return;
+    const blockEl = editable.closest("[data-block-id]");
+    const block = blockById(blockEl?.dataset.blockId);
+    if (block && deleteWhenEmptyTypes.has(block.type) && blockIsEmpty(block)) {
+      deleteBlockById(blockEl.dataset.blockId);
+    }
+  }, true);
+
+  syncJson();
+})();
+</script>
+</body>
+</html>
